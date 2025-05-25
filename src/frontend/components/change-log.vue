@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { useTranslation } from 'i18next-vue'
 const { i18next } = useTranslation()
+
+const minimumAge = parseInt(import.meta.env.VITE_MINIMUM_AGE || "0")
+const showAgeNotice = minimumAge > 0
 </script>
 
 <template>
     <div v-show="i18next.language == 'ja'">
-        <div id="login-notice">
-16歳未満の立ち入りを禁止します。
-        </div>
+    <div id="login-notice" v-if="showAgeNotice">
+      {{ minimumAge }}歳未満の立ち入りを禁止します。
+    </div>
         <div class="changelog">
             <h3>更新ログ</h3>
 2025/05/11: ボイスチェンジャーのバグを修正しました。<br/>
@@ -133,9 +136,9 @@ const { i18next } = useTranslation()
         </div>
     </div>
     <div v-show="i18next.language != 'ja'">
-        <div id="login-notice">
-You must be at least 16 years of age to enter.
-        </div>
+    <div id="login-notice" v-if="showAgeNotice">
+      You must be at least {{ minimumAge }} years of age to enter.
+    </div>
         <div class="changelog">
             <h3>Change Log</h3>
 2025/05/11: Fixed bug with the voice changer.<br/>
