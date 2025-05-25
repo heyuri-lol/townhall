@@ -3,9 +3,9 @@
         <header>
             <div>
                 <h1>
-                    <a href="/">{{ $t("ui.title") }}</a>
+                    <a href="/">{{ siteTitle }}</a>
                 </h1>
-                <h2>{{ $t("ui.subtitle") }}</h2>
+                <h2>{{ siteSubtitle }}</h2>
             </div>
         </header>
         <form id="login-form">
@@ -67,6 +67,8 @@ import { computed, ref } from "vue";
 import { characters } from "../character";
 import { SiteArea, SiteAreasInfo } from "../types";
 import Changelog from "../components/change-log.vue";
+const siteTitle = import.meta.env.VITE_PAGE_TITLE || "ギコっぽいぽい"
+const siteSubtitle = import.meta.env.VITE_PAGE_SUBTITLE || "非公式リメイク"
 
 const emit = defineEmits<{
     login: [

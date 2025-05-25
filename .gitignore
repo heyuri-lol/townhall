@@ -15,7 +15,7 @@ dist-ssr
 # Editor directories and files
 .idea
 .DS_Store
-
+.vscode/settings.json
 
 # App specific
 persisted-state

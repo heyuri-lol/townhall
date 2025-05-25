@@ -210,15 +210,6 @@ i18next.init(
     contextSeparator: '.',
 })
 
-function setPageMetadata()
-{
-    document.title = i18next.t("ui.title")
-    const descriptionElement = document.querySelector("meta[name='description']")
-    if (descriptionElement)
-        descriptionElement.setAttribute("content", i18next.t("ui.subtitle"))
-}
-setPageMetadata()
-
 function setAppLanguage(code: string)
 {
     i18next.changeLanguage(code, setPageMetadata)

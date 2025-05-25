@@ -33,7 +33,7 @@
         button_stream_unmute: "Unmute",
         button_stream_enable_feedback: "Enable feedback",
         button_stream_disable_feedback: "Disable feedback",
-        button_rula: "#rula",
+        button_rula: "#warp",
         button_list: "#list",
         button_preferences: "Preferences",
         button_logout: "Logout",
@@ -55,7 +55,7 @@
         rula_menu_column_room_name: "Stage Name",
         rula_menu_column_user_count: "Users",
         rula_menu_column_streamers: "Streamers",
-        rula_menu_button_rula: "Rula",
+        rula_menu_button_rula: "Warp",
         rula_menu_label_group: "Area",
         rula_menu_group_option_all: "All",
 
