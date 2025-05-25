@@ -706,33 +706,37 @@ video {
     margin-left: 5px;
 }
 
-#character-selection
-{
-    display: flex;
-    width: 100%;
-    overflow-x: auto;
-    padding-top: 2px;
-    padding-bottom: 2px;
+#character-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 4px;
+    max-height: 220px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 4px;
     user-select: none;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-#character-selection label
-{
-    position: relative;
-    min-height: 60px;
-    min-width: 60px;
-    margin: 2px;
+#character-selection label {
+    width: 60px;
+    height: 60px;
     overflow: hidden;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid #999999;
+    position: relative;
 }
 
-#character-selection img
-{
+#character-selection img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
     display: block;
-    position: absolute;
-    object-fit: cover;
 }
+
 
 #character-selection .character-selected {
     border: solid 1px blue;

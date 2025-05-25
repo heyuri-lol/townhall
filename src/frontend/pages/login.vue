@@ -31,11 +31,13 @@
                 <span v-if="!isValidUsername" class="error">{{ $t("ui.error_invalid_username") }}</span>
             </div>
             <div id="character-selection">
-                <label v-for="character in allCharacters" :for="character.characterName + '-selection'"
-                    v-show="!character.isHidden" v-bind:class="{
+                <label v-for="character in allCharacters"
+                    :for="character.characterName + '-selection'"
+                    v-show="showHiddenCharacters || !character.isHidden"
+                    v-bind:class="{
                         'character-selected': character.characterName == characterId,
                     }">
-                    <template v-if="character.isHidden">
+                    <template v-if="character.isHidden && !showHiddenCharacters">
                         This is a secret, please don't tell anyone.
                         これは秘密です、誰にも言わないでください。
                     </template>
@@ -69,6 +71,8 @@ import { SiteArea, SiteAreasInfo } from "../types";
 import Changelog from "../components/change-log.vue";
 const siteTitle = import.meta.env.VITE_PAGE_TITLE || "ギコっぽいぽい"
 const siteSubtitle = import.meta.env.VITE_PAGE_SUBTITLE || "非公式リメイク"
+const showHiddenCharacters = import.meta.env.VITE_SHOW_HIDDEN_CHARACTERS === "true";
+
 
 const emit = defineEmits<{
     login: [
