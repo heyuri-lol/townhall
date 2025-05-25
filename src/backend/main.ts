@@ -1565,7 +1565,26 @@ app.get("/api/areas/:areaId/rooms/:roomId", (req, res) =>
         res.end(stringifyException(e))
     }
 })
+app.get("/api/site-areas-info", (req, res) =>
+{
+    const siteAreasInfo: SiteAreasInfo = Object.fromEntries(Object.keys(roomStates).map(areaId =>
+    {
+        const connectedUserIds: Set<string> = getConnectedUserList(null, areaId)
+            .reduce((acc, val) => acc.add(val.id), new Set<string>())
 
+        return [areaId, {
+            userCount: connectedUserIds.size,
+            streamCount: Object.values(roomStates[areaId])
+                .map(s => s.streams)
+                .flat()
+                .filter(s => s.publisher != null && s.publisher.user.id && connectedUserIds.has(s.publisher.user.id))
+                .length
+        }]
+    }))
+
+    res.set('Cache-Control', 'no-cache')
+    res.json(siteAreasInfo)
+})
 function getCharacterImages(crisp: boolean)
 {
     const characterIds = readdirSync("public/characters")
