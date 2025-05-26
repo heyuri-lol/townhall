@@ -1,6 +1,6 @@
 const isProduction = process.env.NODE_ENV == "production"
 
-import express, { Request, NextFunction} from "express"
+import express, { Request } from "express"
 import { rooms, dynamicRooms } from "./rooms";
 import type { SiteAreasInfo, RoomStateDto, JanusServer, LoginResponseDto, PlayerDto, StreamSlotDto, StreamSlot, PersistedState, CharacterSvgDto, RoomStateCollection, ChessboardStateDto, JankenStateDto, Room, DynamicRoom, ListedRoom, MoveDto } from "./types";
 import { addNewUser, getConnectedUserList, getUsersByIp, getAllUsers, getUserByPrivateId, getUser, Player, removeUser, getFilteredConnectedUserList, setUserAsActive, restoreUserState, isUserBlocking } from "./users";
