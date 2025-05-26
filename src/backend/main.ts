@@ -1,6 +1,6 @@
 const isProduction = process.env.NODE_ENV == "production"
 
-import express, { Request } from "express"
+import express, { Request, NextFunction} from "express"
 import { rooms, dynamicRooms } from "./rooms";
 import type { SiteAreasInfo, RoomStateDto, JanusServer, LoginResponseDto, PlayerDto, StreamSlotDto, StreamSlot, PersistedState, CharacterSvgDto, RoomStateCollection, ChessboardStateDto, JankenStateDto, Room, DynamicRoom, ListedRoom, MoveDto } from "./types";
 import { addNewUser, getConnectedUserList, getUsersByIp, getAllUsers, getUserByPrivateId, getUser, Player, removeUser, getFilteredConnectedUserList, setUserAsActive, restoreUserState, isUserBlocking } from "./users";
@@ -1567,6 +1567,7 @@ app.get("/api/areas/:areaId/rooms/:roomId", (req, res) =>
 })
 app.get("/api/site-areas-info", (req, res) =>
 {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     const siteAreasInfo: SiteAreasInfo = Object.fromEntries(Object.keys(roomStates).map(areaId =>
     {
         const connectedUserIds: Set<string> = getConnectedUserList(null, areaId)
