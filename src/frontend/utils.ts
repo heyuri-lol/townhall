@@ -1,3 +1,9 @@
+declare global {
+    interface Window {
+        EXPECTED_SERVER_VERSION: string;
+    }
+}
+
 import type { ClientRoom, ImageLayer, DeviceInfo } from './types'
 
 export const BLOCK_WIDTH = 80

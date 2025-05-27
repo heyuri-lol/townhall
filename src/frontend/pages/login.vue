@@ -33,25 +33,28 @@
             <div id="character-selection">
                 <label v-for="character in allCharacters"
                     :for="character.characterName + '-selection'"
-                    v-show="showHiddenCharacters || !character.isHidden"
-                    v-bind:class="{
-                        'character-selected': character.characterName == characterId,
-                    }">
-                    <template v-if="character.isHidden && !showHiddenCharacters">
+                    v-show="character.isEvent ? showEventCharacters : (!character.isHidden || showHiddenCharacters)"
+                    :class="{ 'character-selected': character.characterName == characterId }">
+                    
+                    <template v-if="character.isHidden && !showHiddenCharacters && !character.isEvent">
                         This is a secret, please don't tell anyone.
                         これは秘密です、誰にも言わないでください。
                     </template>
-                    <input type="radio" :id="character.characterName + '-selection'" :disabled="isLoggingIn"
-                        :value="character.characterName" v-model="characterId" />
+
+                    <input type="radio"
+                        :id="character.characterName + '-selection'"
+                        :disabled="isLoggingIn"
+                        :value="character.characterName"
+                        v-model="characterId" />
+
                     <img :style="{
                         top: character.portrait.top! * 100 + '%',
                         left: character.portrait.left! * 100 + '%',
                         width: character.portrait.scale! * 100 + '%',
                     }" :src="'characters/' +
-                character.characterName +
-                '/front-standing.' +
-                character.format
-                " />
+                        character.characterName +
+                        '/front-standing.' +
+                        character.format" />
                 </label>
             </div>
             <button id="login-button" v-on:click.prevent="handleLoginClick" :disabled="isLoggingIn || !isValidUsername">
@@ -72,6 +75,21 @@ import Changelog from "../components/change-log.vue";
 const siteTitle = import.meta.env.VITE_PAGE_TITLE || "ギコっぽいぽい"
 const siteSubtitle = import.meta.env.VITE_PAGE_SUBTITLE || "非公式リメイク"
 const showHiddenCharacters = import.meta.env.VITE_SHOW_HIDDEN_CHARACTERS === "true";
+const showEventCharacters = import.meta.env.VITE_SHOW_EVENT_CHARACTERS === "true";
+
+const allCharacters = Object.values(characters).map((char) => {
+    let visible = false;
+
+
+    if (char.isHidden && char.isEvent && !showEventCharacters){
+        visible = true;
+    }else if(char.isHidden && !char.isEvent && showHiddenCharacters){
+        visible = true;
+    }else if(char.isHidden == false && char.isEvent == false){
+        visible = true;
+    }
+    return { ...char, visible };
+});
 
 
 const emit = defineEmits<{
@@ -91,8 +109,6 @@ const props = defineProps({
     siteAreasInfo: { type: Object as () => SiteAreasInfo, required: true },
     siteAreas: { type: Array as () => SiteArea[], required: true },
 });
-
-const allCharacters = Object.values(characters);
 
 const username = ref(localStorage.getItem("username") || "");
 const password = ref("");

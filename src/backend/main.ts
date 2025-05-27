@@ -1586,49 +1586,81 @@ app.get("/api/site-areas-info", (req, res) =>
     res.set('Cache-Control', 'no-cache')
     res.json(siteAreasInfo)
 })
+
 function getCharacterImages(crisp: boolean)
 {
     const characterIds = readdirSync("public/characters")
 
-    const output: { [characterId: string]: CharacterSvgDto} = {}
+    const output: { [characterId: string]: CharacterSvgDto } = {}
+
     for (const characterId of characterIds)
     {
-        const extension = characterId == "molgiko" ? "png" : "svg"
+        const getCharacterImage = (basePath: string, crisp: boolean) => {
+            const svgPath = `public/characters/${basePath}.svg`
+            const pngPath = `public/characters/${basePath}.png`
 
-        const getCharacterImage = (path: string, crisp: boolean) => {
-            const completePath = "public/characters/" + path
+            let path: string
+            let isBase64 = false
 
-            if (!existsSync(completePath))
+            if (existsSync(svgPath)) {
+                path = svgPath
+            } else if (existsSync(pngPath)) {
+                path = pngPath
+                isBase64 = true
+            } else {
                 return null
-            
-            let text = readFileSync(completePath, { encoding: path.endsWith(".svg") ? "utf-8" : "base64"})
+            }
+
+            let text = readFileSync(path, { encoding: path.endsWith(".svg") ? "utf-8" : "base64" })
 
             if (crisp && path.endsWith(".svg"))
                 text = text.replace('<svg', '<svg shape-rendering="crispEdges"')
 
-            return text
+            return { content: text, isBase64 }
+        }
+
+        const wrap = (res: ReturnType<typeof getCharacterImage>) => res ? res.content : null
+
+        const images = {
+            frontSitting: getCharacterImage(`${characterId}/front-sitting`, crisp),
+            frontStanding: getCharacterImage(`${characterId}/front-standing`, crisp),
+            frontWalking1: getCharacterImage(`${characterId}/front-walking-1`, crisp),
+            frontWalking2: getCharacterImage(`${characterId}/front-walking-2`, crisp),
+            backSitting: getCharacterImage(`${characterId}/back-sitting`, crisp),
+            backStanding: getCharacterImage(`${characterId}/back-standing`, crisp),
+            backWalking1: getCharacterImage(`${characterId}/back-walking-1`, crisp),
+            backWalking2: getCharacterImage(`${characterId}/back-walking-2`, crisp),
+            frontSittingAlt: getCharacterImage(`${characterId}/front-sitting-alt`, crisp),
+            frontStandingAlt: getCharacterImage(`${characterId}/front-standing-alt`, crisp),
+            frontWalking1Alt: getCharacterImage(`${characterId}/front-walking-1-alt`, crisp),
+            frontWalking2Alt: getCharacterImage(`${characterId}/front-walking-2-alt`, crisp),
+            backSittingAlt: getCharacterImage(`${characterId}/back-sitting-alt`, crisp),
+            backStandingAlt: getCharacterImage(`${characterId}/back-standing-alt`, crisp),
+            backWalking1Alt: getCharacterImage(`${characterId}/back-walking-1-alt`, crisp),
+            backWalking2Alt: getCharacterImage(`${characterId}/back-walking-2-alt`, crisp),
         }
 
         output[characterId] = {
-            isBase64: extension == "png",
-            frontSitting: (getCharacterImage(characterId + "/front-sitting." + extension, crisp))!,
-            frontStanding: (getCharacterImage(characterId + "/front-standing." + extension, crisp))!,
-            frontWalking1: (getCharacterImage(characterId + "/front-walking-1." + extension, crisp))!,
-            frontWalking2: (getCharacterImage(characterId + "/front-walking-2." + extension, crisp))!,
-            backSitting: (getCharacterImage(characterId + "/back-sitting." + extension, crisp))!,
-            backStanding: (getCharacterImage(characterId + "/back-standing." + extension, crisp))!,
-            backWalking1: (getCharacterImage(characterId + "/back-walking-1." + extension, crisp))!,
-            backWalking2: (getCharacterImage(characterId + "/back-walking-2." + extension, crisp))!,
-            frontSittingAlt: getCharacterImage(characterId + "/front-sitting-alt." + extension, crisp),
-            frontStandingAlt: getCharacterImage(characterId + "/front-standing-alt." + extension, crisp),
-            frontWalking1Alt: getCharacterImage(characterId + "/front-walking-1-alt." + extension, crisp),
-            frontWalking2Alt: getCharacterImage(characterId + "/front-walking-2-alt." + extension, crisp),
-            backSittingAlt: getCharacterImage(characterId + "/back-sitting-alt." + extension, crisp),
-            backStandingAlt: getCharacterImage(characterId + "/back-standing-alt." + extension, crisp),
-            backWalking1Alt: getCharacterImage(characterId + "/back-walking-1-alt." + extension, crisp),
-            backWalking2Alt: getCharacterImage(characterId + "/back-walking-2-alt." + extension, crisp),
+            isBase64: Object.values(images).some(x => x?.isBase64),
+            frontSitting: wrap(images.frontSitting)!,
+            frontStanding: wrap(images.frontStanding)!,
+            frontWalking1: wrap(images.frontWalking1)!,
+            frontWalking2: wrap(images.frontWalking2)!,
+            backSitting: wrap(images.backSitting)!,
+            backStanding: wrap(images.backStanding)!,
+            backWalking1: wrap(images.backWalking1)!,
+            backWalking2: wrap(images.backWalking2)!,
+            frontSittingAlt: wrap(images.frontSittingAlt),
+            frontStandingAlt: wrap(images.frontStandingAlt),
+            frontWalking1Alt: wrap(images.frontWalking1Alt),
+            frontWalking2Alt: wrap(images.frontWalking2Alt),
+            backSittingAlt: wrap(images.backSittingAlt),
+            backStandingAlt: wrap(images.backStandingAlt),
+            backWalking1Alt: wrap(images.backWalking1Alt),
+            backWalking2Alt: wrap(images.backWalking2Alt),
         }
     }
+
     return output
 }
 

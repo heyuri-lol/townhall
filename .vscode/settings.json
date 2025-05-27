@@ -14,8 +14,6 @@
         "gikopoi2.code-workspace",
         "package.json",
         "svgo.config.js",
-        "tsconfig.json",
-        "tsconfig.server.json",
         "version",
         "yarn.lock"
     ],
@@ -36,8 +34,6 @@
         "gikopoi2.code-workspace": true,
         "package.json": true,
         "svgo.config.js": true,
-        "tsconfig.json": true,
-        "tsconfig.server.json": true,
         "version": true,
         "yarn.lock": true
     }

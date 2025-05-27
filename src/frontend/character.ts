@@ -38,6 +38,7 @@ type CharacterObject = {
     name: string,
     format?: CharacterFormat,
     isHidden?: boolean,
+    isEvent?:boolean,
     scale?: number,
     portrait?: PortraitProps
 }
@@ -56,6 +57,8 @@ export class Character
     public characterName: string
     public format: CharacterFormat
     public isHidden: boolean
+    public isEvent: boolean
+
     public portrait: PortraitProps = {
         left: -0.5,
         top: 0,
@@ -69,11 +72,14 @@ export class Character
     public dto: CharacterSvgDto | null = null // private
     public isLoaded: boolean = false
     
-    constructor({name,
-        format = "svg",
-        isHidden = false,
-        scale = 0.5,
-        portrait}: CharacterObject)
+    constructor({
+            name,
+            format = "svg",
+            isHidden = false,
+            scale = 0.5,
+            portrait,
+            isEvent = false,
+        }: CharacterObject)
     {
         this.characterName = name;
         this.format = format;
@@ -82,6 +88,7 @@ export class Character
         
         // On new year's, all characters are visible
         this.isHidden = annualEvents.newYears.isNow() ? false : isHidden
+        this.isEvent = annualEvents.newYears.isNow() ? false : isEvent
         
         this.scale = scale
     }
@@ -195,62 +202,93 @@ export class Character
 }
 
 const characterObjects: CharacterObject[] = [
-    { name: "giko", portrait: { left: -0.5, top: 0.24 } },
-    { name: "naito", portrait: { left: -0.48, top: 0.13 } },
-    { name: "shii", portrait: { left: -0.5, top: 0.24 } },
-    { name: "hikki", portrait: { left: -0.44, top: -0.12 } },
-    { name: "tinpopo", portrait: { left: -0.5, top: 0.26 } },
-    { name: "shobon", portrait: { left: -0.5, top: -0.2 } },
-    { name: "nida", portrait: { left: -0.5, top: 0.27 } },
-    { name: "salmon", portrait: { left: 0.17, top: -0.54 } },
-    { name: "giko_hat", portrait: { left: -0.5, top: 0.10 } },
-    { name: "shii_hat", portrait: { left: -0.5, top: 0.10 } },
-    { name: "shobon_hat", isHidden: !annualEvents.christmasTime.isNow(), portrait: { left: -0.41, top: -0.2 } },
-    { name: "furoshiki", portrait: { left: -0.5, top: 0.24 } },
-    { name: "golden_furoshiki", isHidden: !annualEvents.goldenWeek.isNow(), portrait: { left: -0.5, top: 0.24 } },
-    { name: "furoshiki_shii", isHidden: annualEvents.spring.isNow(), portrait: { left: -0.5, top: 0.24 } },
-    { name: "sakura_furoshiki_shii", isHidden: !annualEvents.spring.isNow(), portrait: { left: -0.5, top: 0.24 } },
-    { name: "furoshiki_shobon", portrait: { left: -0.41, top: -0.2 } },
-    { name: "naitoapple", portrait: { left: -0.5, top: 0.1 } },
-    { name: "shii_pianica", portrait: { left: -0.46, top: 0.24 } },
-    { name: "shii_uniform", portrait: { left: -0.5, top: 0.24 } },
-    { name: "hungry_giko", isHidden: true, portrait: { left: -0.45, top: 0.15 } },
-    { name: "rikishi_naito", isHidden: true, portrait: { left: -0.30, top: -0.18, scale: 1.7 } },
-    { name: "hentai_giko", isHidden: true, portrait: { left: -0.45, top: 0.33, scale: 1.7 } },
-    { name: "shar_naito", isHidden: true, portrait: { left: -0.48, top: 0.13 } },
-    { name: "dark_naito_walking", isHidden: true, portrait: { left: -0.48, top: 0.13 } },
-    { name: "ika", isHidden: true, portrait: { left: 0, top: 0.18, scale: 1 } },
-    { name: "takenoko", isHidden: true, portrait: { left: 0, top: 0, scale: 1 } },
-    { name: "kaminarisama_naito", isHidden: true, portrait: { left: -0.48, top: 0.13 } },
-    { name: "panda_naito", portrait: { left: -0.48, top: 0.13 } },
-    { name: "wild_panda_naito", isHidden: true, portrait: { left: -0.48, top: 0.13 } },
-    { name: "funkynaito", isHidden: true, portrait: { left: -0.48, top: 0.13 } },
-    { name: "molgiko", format: "png", isHidden: true, portrait: { left: -0.8, top: -0.7 } },
-    { name: "tikan_giko", isHidden: true, portrait: { left: -0.5, top: 0.24 } },
-    { name: "hotsuma_giko", portrait: { left: -0.5, top: 0.24 } },
-    { name: "dokuo", portrait: { left: -0.58, top: -0.33 } },
-    { name: "onigiri", portrait: { left: -0.38, top: 0.20, scale: 1.7 } },
-    { name: "tabako_dokuo", isHidden: true, portrait: { left: -0.58, top: -0.33 } },
-    { name: "himawari", isHidden: true, portrait: { left: -0.47, top: 0 } },
-    { name: "zonu", portrait: { left: -0.7, top: -0.46 } },
-    { name: "george", portrait: { left: -0.48, top: 0.13 } },
-    { name: "chotto_toorimasu_yo", portrait: { left: -0.54, top: -0.34 } },
-    { name: "tokita_naito", isHidden: !annualEvents.spooktober.isNow(), portrait: { left: -0.40, top: 0.04, scale: 1.7 } },
-    { name: "pumpkinhead", isHidden: !annualEvents.spooktober.isNow(), portrait: { left: -0.74, top: 0.34, scale: 2.3 } },
-    { name: "naito_yurei", isHidden: !annualEvents.spooktober.isNow(), portrait: { left: -0.48, top: 0.13 } },
-    { name: "shiinigami", isHidden: !annualEvents.spooktober.isNow(), portrait: { left: -1, top: 0.02, scale: 2.8 } },
-    { name: "youkanman", isHidden: true, portrait: { left: -0.46, top: -0.5, scale: 1.8 } },
-    { name: "baba_shobon", isHidden: true, portrait: { left: -0.5, top: -0.2 } },
-    { name: "uzukumari", portrait: { left: -0.98, top: -0.69 } },
-    { name: "giko_basketball", isHidden: true, portrait: { left: -0.5, top: 0.24 } },
-    { name: "mikan_naito", isHidden: true, portrait: { left: -0.48, top: 0.13 } },
-    { name: "giko_shamisen", isHidden: true, portrait: { left: -0.5, top: 0.24 } },
-    { name: "shii_syakuhati", isHidden: true, portrait: { left: -0.5, top: 0.24 } },
-    { name: "taiko_naito", isHidden: true, portrait: { left: -0.48, top: 0.13 } },
-    { name: "shobon_raincoat", isHidden: !annualEvents.rainy.isNow(), portrait: { left: -0.41, top: -0.2 } },
-    { name: "shii_raincoat", isHidden: !annualEvents.rainy.isNow(), portrait: { left: -0.46, top: 0.24 } },
-    { name: "shii_shintaisou", isHidden: false, portrait: { left: -0.46, top: 0.24 } },
-    { name: "shii_toast", isHidden: false, portrait: { left: -0.46, top: 0.24 } },
+    { name: "shobon_raincoat",  isEvent: true, isHidden: annualEvents.rainy.isNow() },
+    { name: "shii_raincoat",    isEvent: true, isHidden: annualEvents.rainy.isNow() },
+
+    { name: "tokita_naito", isEvent: true, isHidden: annualEvents.spooktober.isNow() },
+    { name: "pumpkinhead",  isEvent: true, isHidden: annualEvents.spooktober.isNow() },
+    { name: "naito_yurei",  isEvent: true, isHidden: annualEvents.spooktober.isNow() },
+    { name: "shiinigami",   isEvent: true, isHidden: annualEvents.spooktober.isNow() },
+    
+    { name: "giko_hat",     isEvent: true, isHidden: annualEvents.christmasTime.isNow() },
+    { name: "shii_hat",     isEvent: true, isHidden: annualEvents.christmasTime.isNow()},
+    { name: "shobon_hat",   isEvent: true, isHidden: annualEvents.christmasTime.isNow() },
+
+    // normal characters
+    { name: "giko" },
+    { name: "shii" },
+    { name: "shobon" },
+    { name: "zonu" },
+    { name: "naito" },
+    { name: "hikki" },
+    { name: "george" },
+    { name: "salmon" },
+    { name: "nida" },
+    { name: "chotto_toorimasu_yo" },
+    { name: "dokuo" },
+    { name: "tabako_dokuo", isHidden: true },
+    { name: "onigiri" },
+    { name: "tinpopo" },
+
+    //furo
+    { name: "uzukumari" },
+    { name: "furoshiki" },
+    { name: "golden_furoshiki", isEvent: true, isHidden: annualEvents.goldenWeek.isNow() },
+    { name: "furoshiki_shobon" },
+    { name: "furoshiki_shii"},
+    { name: "sakura_furoshiki_shii"},
+
+    // gikos
+    { name: "hotsuma_giko" },
+    { name: "kimono_giko" },
+    { name: "hentai_giko",      isHidden: true },
+    { name: "giko_basketball",  isHidden: true },
+    { name: "tikan_giko",       isHidden: true },
+    { name: "hungry_giko",      isHidden: true },
+    { name: "giko_shamisen",    isHidden: true },
+    { name: "prison_giko",      isHidden: true,},
+    { name: "giko_cop",         isHidden: true, format: "png" },
+    { name: "giko_islam",       isHidden: true, format: "png"},
+    { name: "long_giko",        isHidden: true, format: "png"},
+    { name: "mol_giko",         isHidden: true, format: "png"},
+    { name: "mitsu_giko",       isHidden: true},
+    { name: "gacha",            isHidden: true },
+
+    // shii
+    { name: "shii_syakuhati", isHidden: true },
+    { name: "kimono_shii" },
+    { name: "shii_pianica" },
+    { name: "shii_uniform" },
+    { name: "shii_toast"},
+    { name: "shii_shintaisou" },
+    { name: "shii_islam", isHidden: true, format: "png" },
+
+    // shobon
+    { name: "baba_shobon", isHidden: true },
+
+    // naito
+    { name: "naitoapple" },
+    { name: "panda_naito" },
+    { name: "wild_panda_naito",     isHidden: true },
+    { name: "kaminarisama_naito",   isHidden: true },
+    { name: "funkynaito",           isHidden: true },
+    { name: "mikan_naito",          isHidden: true },
+    { name: "taiko_naito",          isHidden: true },
+    { name: "rikishi_naito",        isHidden: true },
+    { name: "shar_naito",           isHidden: true },
+    { name: "dark_naito_walking",   isHidden: true },
+    { name: "akai",                 isHidden: true, format: "png" },
+
+    // toorimasu
+    { name: "bif_alien",    isHidden: true, format: "png" },
+    { name: "bif_wizard",   isHidden: true, format: "png" },
+
+    // other
+    { name: "himawari",     isHidden: true },
+    { name: "youkanman",    isHidden: true },
+    { name: "ika",          isHidden: true },
+    { name: "takenoko",     isHidden: true },
+
 ]
 
 export const characters: { [characterId: string]: Character } =
