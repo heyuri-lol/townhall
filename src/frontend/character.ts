@@ -287,6 +287,8 @@ const characterObjects: CharacterObject[] = [
     { name: "himawari",     isHidden: true },
     { name: "youkanman",    isHidden: true },
     { name: "ika",          isHidden: true },
+    { name: "goatse",       isEvent:  true, isHidden: true, format: "png"},
+    { name: "habbo",        isHidden: true, format: "png"},
     { name: "takenoko",     isHidden: true },
 
 ]
